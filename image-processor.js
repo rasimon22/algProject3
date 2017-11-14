@@ -17,25 +17,26 @@ function ImageProcessor(){
         }).catch(function(err){
             console.error(err);
         });
+    }
     /**
-     * Uses a one dimensional moving average of color a "box blur"
-     * applied in both directions consecutively achieves the same result
-     * as both at once, but with a T(2n) run time instead of T(n^2) 
+     * Uses consecutive one directional moving averages to apply a blur
+     * this runs faster than 2 directions at once; T(2n) vs T(n^2)
+     * 
      */
-    this.blur = function(path){
+    this.blur = function(path, blur){
         Jimp.read(path).then(function(image){
             image.scan(0,0, image.bitmap.width, image.bitmap.height, function(x, y, idx){
-                if(x>0 && x<image.bitmap.width-4 && y>0 && y<image.bitmap.height-4){
+                if(x>0 && x<image.bitmap.width-blur && y>0 && y<image.bitmap.height-blur){
                 
-                    let c1 = Jimp.intToRGBA(image.getPixelColor(x-4,y));
-                    let c2 = Jimp.intToRGBA(image.getPixelColor(x+4,y));
+                    let c1 = Jimp.intToRGBA(image.getPixelColor(x-blur,y));
+                    let c2 = Jimp.intToRGBA(image.getPixelColor(x+blur,y));
                     c1.r = (c1.r+c2.r)/2;
                     c1.g = (c1.g+c2.g)/2;
                     c1.b = (c1.b+c2.b)/2;
                     c1.a = (c1.a+c2.a)/2;
                     image.setPixelColor(Jimp.rgbaToInt(c1.r,c1.g,c1.b,c1.a), x, y); 
-                    c1 = Jimp.intToRGBA(image.getPixelColor(x,y-4));
-                    c2 = Jimp.intToRGBA(image.getPixelColor(x,y+4));
+                    c1 = Jimp.intToRGBA(image.getPixelColor(x,y-blur));
+                    c2 = Jimp.intToRGBA(image.getPixelColor(x,y+blur));
                     c1.r = (c1.r+c2.r)/2;
                     c1.g = (c1.g+c2.g)/2;
                     c1.b = (c1.b+c2.b)/2;
@@ -53,4 +54,4 @@ function ImageProcessor(){
 }
 
 let ip = new ImageProcessor();
-ip.blur("mountain.png");
+ip.blur("mountain.png",1);
