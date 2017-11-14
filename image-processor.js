@@ -17,10 +17,10 @@ function ImageProcessor(){
         }).catch(function(err){
             console.error(err);
         });
-    }
     /**
-     * Uses a uniformly weighted kernel over the input image 
-     * colloquially known as a box blur
+     * Uses a one dimensional moving average of color a "box blur"
+     * applied in both directions consecutively achieves the same result
+     * as both at once, but with a T(2n) run time instead of T(n^2) 
      */
     this.blur = function(path){
         Jimp.read(path).then(function(image){
