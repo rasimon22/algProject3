@@ -26,7 +26,7 @@ function ImageProcessor(){
     this.blur = function(path, blur){
         Jimp.read(path).then(function(image){
             image.scan(0,0, image.bitmap.width, image.bitmap.height, function(x, y, idx){
-                if(x>0 && x<image.bitmap.width-blur && y>0 && y<image.bitmap.height-blur){
+                if(x>blur && x<image.bitmap.width-blur && y>blur && y<image.bitmap.height-blur){
                 
                     let c1 = Jimp.intToRGBA(image.getPixelColor(x-blur,y));
                     let c2 = Jimp.intToRGBA(image.getPixelColor(x+blur,y));
@@ -54,4 +54,4 @@ function ImageProcessor(){
 }
 
 let ip = new ImageProcessor();
-ip.blur("mountain.png",1);
+ip.blur("mountain.png",10);
