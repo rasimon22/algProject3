@@ -23,7 +23,7 @@ function ImageProcessor(){
      * this runs faster than 2 directions at once; T(2n) vs T(n^2)
      * 
      */
-    this.blur = function(path, blur){
+    this.box_blur = function(path, blur){
         Jimp.read(path).then(function(image){
             image.scan(0,0, image.bitmap.width, image.bitmap.height, function(x, y, idx){
                 if(x>blur && x<image.bitmap.width-blur && y>blur && y<image.bitmap.height-blur){
@@ -54,4 +54,4 @@ function ImageProcessor(){
 }
 
 let ip = new ImageProcessor();
-ip.blur("mountain.png",10);
+ip.box_blur("mountain.png",10);
