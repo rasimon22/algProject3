@@ -1,3 +1,5 @@
+function Kernel(h, w){
+}
 function ImageProcessor(){
     var Jimp = require('jimp');
     /*****************************
@@ -51,7 +53,18 @@ function ImageProcessor(){
             console.error(err);
             });
     }
+    this.sharpen = function(bl, or){
+        let blurred = new Jimp(bl,function(err){});
+        let original = new Jimp(or, function(err){});
+        let mask = new Jimp(1920, 700,function(err,image){
+            image.scan(0,0,image.bitmap.width,image.bitmap.height,function(x,y,idx){
+                image.setPixelColor(blurred.getPixelColor(x,y)-original.getPixelColor(x,y),x,y);
+            });
+        });
+        image.write("mask.png");
+    }
 }
 
 let ip = new ImageProcessor();
 ip.box_blur("mountain.png",10);
+ip.sharpen("box_blur.png","mountain.png");
